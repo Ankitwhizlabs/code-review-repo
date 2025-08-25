@@ -4,9 +4,8 @@ steps:
     args:
       - '-c'
       - |
-        # Get list of changed files in this commit
-        CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
-        for file in $CHANGED_FILES; do
+        FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
+        for file in $FILES; do
           CONTENT=$(cat "$file")
           curl -X POST $_CODE_REVIEW_URL/review \
             -H "Content-Type: application/json" \
