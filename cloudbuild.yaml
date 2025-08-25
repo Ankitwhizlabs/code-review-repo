@@ -4,10 +4,10 @@ steps:
     args:
       - '-c'
       - |
-        FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
-        for file in $FILES; do
-          CONTENT=$(cat "$file")
-          curl -X POST https://code-review-service-cwmu2ywqna-uc.a.run.app/review \
-            -H "Content-Type: application/json" \
-            -d "{\"filename\":\"$file\",\"content\":\"$CONTENT\"}"
+        for file in $(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA); do
+          if [ -f "$file" ]; then
+            curl -X POST https://code-review-service-cwmu2ywqna-uc.a.run.app/review \
+              -H "Content-Type: application/json" \
+              -d "{\"filename\":\"$file\",\"content\":\"$(cat "$file")\"}"
+          fi
         done
