@@ -4,14 +4,12 @@ steps:
     args:
       - '-c'
       - |
-        # Get changed files from commit
-        CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
-        for file in $CHANGED_FILES; do
+        FILES=$(git diff-tree --no-commit-id --name-only -r $COMMIT_SHA)
+        for file in $FILES; do
           CONTENT=$(cat $file)
           curl -X POST $_CODE_REVIEW_URL/review \
             -H "Content-Type: application/json" \
             -d "{\"filename\":\"$file\",\"content\":\"$CONTENT\"}"
         done
-
 substitutions:
   _CODE_REVIEW_URL: "https://code-review-service-cwmu2ywqna-uc.a.run.app"
